@@ -66,10 +66,11 @@ public class MessageListServlet extends HttpServlet {
 			StringBuffer  realUrl = request.getRequestURL();
 			StringBuilder sb = new StringBuilder();
 			sb.append(realUrl.substring(0, realUrl.lastIndexOf("ForShare/")));
-			//String fuell = file.getFurl();
-			int i = file.getFurl().lastIndexOf("ForShare");
-			int j =  file.getFurl().length();
-			sb.append(file.getFurl().substring(i,j));
+			String fuell = file.getFurl();
+			fuell = fuell.replace("\\ForShare\\upload", "/ForShare/upload");
+			int i = fuell.lastIndexOf("ForShare");
+			int j =  fuell.length();
+			sb.append(fuell.substring(i,j));
 			//realUrl.append(file.getFurl());
 			download.setFurl(sb.toString());
 			download.setMsg(notifyDao.getMsgByFID(file.getFid()));
