@@ -82,6 +82,9 @@ function getUser() {
 	</script>
 	<body>
 	
+    
+   
+	
 	
 
 		<!-- 标题显示 -->
@@ -124,7 +127,7 @@ function getUser() {
 								List<Grade> list = gradeDao.getAllGradesList();
 								%>
 								<td>
-									<select name="grade" id="grade"  styleClass="SelectStyle" onchange="getMajor()"  class="{required:true}">
+									<select name="grade" id="grade" onChange="getMajor()"  class="{required:true}">
 										<option value="" selected="selected">请选择学院</option>
 										
 										
@@ -133,11 +136,11 @@ function getUser() {
 											<option value="<%=g.getGid() %>"><%=g.getGname() %></option>
 									<%} %>
 									</select>
-									<select name="major" id="major" property="departmentId" styleClass="SelectStyle" onchange="getClass()"  class="{required:true}">
+									<select name="major" id="major" onChange="getClass()"  class="{required:true}">
 										<option value="">请选择专业</option>
 										
 									</select>
-									<select name="class" id="class" property="departmentId" styleClass="SelectStyle"  class="{required:true}">
+									<select name="class" id="class" class="{required:true}">
 										<option value="">请选择班级</option>
 									</select>
 								</td>
@@ -147,7 +150,7 @@ function getUser() {
 									用户名
 								</td>
 								<td>
-									<input type="text" id="loginName" class="required" name="loginName" onblur="getUser()"></input><span id="result"></span>
+									<input type="text" id="loginName" class="required" name="loginName" onBlur="getUser()"></input><span id="result"></span>
 									* （用户名唯一）
 								</td>
 							</tr>
@@ -184,9 +187,7 @@ function getUser() {
 			</form>
 		</div>
 
-		<div class="Description">
-		
-		</div>
+	
 		
 	</body>
 	
