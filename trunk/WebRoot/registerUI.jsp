@@ -70,7 +70,7 @@ function getUser() {
 		loginName = $.trim(loginName);
 		if(loginName.length == 0 )return;
 		
-		$.get("AjaxServlet",{type : "user" , loginName : $("#loginName").val()},function callback(data){
+		$.post("AjaxServlet",{type : "user" , loginName : $("#loginName").val()},function callback(data){
 			
 			$("#result").html(data);
 			}
