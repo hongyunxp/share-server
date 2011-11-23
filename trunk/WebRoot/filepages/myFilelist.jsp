@@ -63,7 +63,7 @@
 								<a href= "DownloadServlet?fid=${file.fid}">下载</a> 
 							</TD>
 							<TD width="20%">
-								<a href="FileServlet?type=del&fid=${file.fid}"  onclick="return confirm('确定删除？')">删除</a> 
+								<a href="FileServlet?type=del&current=${pageModel.currentPage}&fid=${file.fid}"  onclick="return confirm('确定删除？')">删除</a> 
 							</TD>
 							
 						</TR>
