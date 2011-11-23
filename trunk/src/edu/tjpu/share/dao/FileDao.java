@@ -124,12 +124,14 @@ public class FileDao {
 
 			flag = conn.getAutoCommit();
 			// 开启事务
-			 conn.setAutoCommit(false);
+			 //conn.setAutoCommit(false);
 			for (FileForUpload file : inputUploadFileList) {
 				
 				//文件存储、路径
 				long name = System.currentTimeMillis();
 				String tmpfname = file.getFname();
+				//int i = tmpfname.lastIndexOf(".");
+				//int j = tmpfname.length();
 				tmpfname = tmpfname.substring(tmpfname.lastIndexOf("."), tmpfname.length());
 				String furl = baseUrl +"/"+ name
 						+ tmpfname;
@@ -183,17 +185,17 @@ public class FileDao {
 			}
 
 			// 提交事务
-			 conn.commit();
-			 conn.setAutoCommit(flag);
+			// conn.commit();
+			 //conn.setAutoCommit(flag);
 
 		} catch (SQLException e) {
-			 try {
+			 //try {
 			// 回滚事务
-			 conn.rollback();
-			 conn.setAutoCommit(flag);
-			 } catch (SQLException e1) {
-			 e1.printStackTrace();
-			 }
+			// conn.rollback();
+			 //conn.setAutoCommit(flag);
+			 //} catch (SQLException e1) {
+			 //e1.printStackTrace();
+			 //}
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
