@@ -256,6 +256,11 @@ public class UserDao {
 		return backStr;
 	}
 
+	/**
+	 * 如果没有同名则返回true，有则返回false
+	 * @param uname
+	 * @return
+	 */
 	public boolean checkUserName(String uname) {
 		String check = "select Uname from user where Uname=?";
 		DBConn dbConn = new DBConn();
