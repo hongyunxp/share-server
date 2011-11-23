@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.tjpu.share.dao.FileDao;
 import edu.tjpu.share.po.FileForUpload;
-import edu.tjpu.share.util.Base64Util;
 import edu.tjpu.share.util.XMLUtil;
 
 public class UploadFromAndroid extends HttpServlet {
@@ -51,10 +50,10 @@ private static final long serialVersionUID = 1L;
 		}
 		
 		FileDao fileDao = new FileDao();
-		//TODO 加Notify
-		//TODO文件路径
+		
 		String tmp = this.getServletContext().getRealPath("/upload");
-		boolean status = fileDao.addFileByServer(Base64Util.convertFileforUpload(fileList,tmp));
+		
+		boolean status = fileDao.addFileByAndroid(fileList, tmp);
 		
 		PrintWriter pw = response.getWriter();
 		XMLUtil.generateStatus(pw, status);

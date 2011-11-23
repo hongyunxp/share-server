@@ -86,7 +86,7 @@ public class Base64Util {
 		return true;
 
 	}
-
+	@Deprecated
 	public static List<edu.tjpu.share.po.File> convertFileforUpload(
 			List<FileForUpload> inputUploadFileList,String baseUrl) throws IOException {
 		List<edu.tjpu.share.po.File> FileListbuffer = new ArrayList<edu.tjpu.share.po.File>();
@@ -101,8 +101,10 @@ public class Base64Util {
 
 			long name = System.currentTimeMillis();
 			//TODO文件路径
-			String furl = baseUrl + name
-					+ uploadbuffer.getFname();
+			String tmpfname = uploadbuffer.getFname();
+			tmpfname = tmpfname.substring(tmpfname.lastIndexOf("."), tmpfname.length());
+			String furl = baseUrl +"/"+ name
+					+ tmpfname;
 			if (!"".equals(uploadbuffer.getBase64bytes())
 					&& uploadbuffer.getBase64bytes() != null) {
 				writeBASE64toFile(furl, uploadbuffer.getBase64bytes());
@@ -110,6 +112,7 @@ public class Base64Util {
 			}
 			Date uploaddate = new Date();
 			filebuffer.setUploaddate(uploaddate);
+			FileListbuffer.add(filebuffer);
 		}
 		return FileListbuffer;
 	}

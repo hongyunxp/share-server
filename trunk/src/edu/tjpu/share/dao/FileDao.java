@@ -1,5 +1,6 @@
 package edu.tjpu.share.dao;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import edu.tjpu.share.po.FileForUpload;
 import edu.tjpu.share.po.Notify;
+import edu.tjpu.share.util.Base64Util;
 import edu.tjpu.share.util.DBConn;
 
 public class FileDao {
@@ -36,7 +38,7 @@ public class FileDao {
 
 			flag = conn.getAutoCommit();
 			// 开启事务
-			// conn.setAutoCommit(false);
+			 conn.setAutoCommit(false);
 			for (edu.tjpu.share.po.File file : fileBeanList) {
 
 				String strSQL = "insert into file values(?, ?, ?, ?, ?, ?, ?)";
@@ -68,6 +70,7 @@ public class FileDao {
 					Date ndate = new Date();
 					notify.setNdate(ndate);
 					notify.setNisread(0);
+					
 					notify.setNotify(userDao.getUserByID(file.getUidfrom())
 							.getUname() + "给您分享了文件:" + file.getFname());
 					notify.setUidfrom(file.getUidfrom());
@@ -80,17 +83,17 @@ public class FileDao {
 			}
 
 			// 提交事务
-			// conn.commit();
-			// conn.setAutoCommit(flag);
+			 conn.commit();
+			 conn.setAutoCommit(flag);
 
 		} catch (SQLException e) {
-			// try {
+			 try {
 			// 回滚事务
-			// conn.rollback();
-			// conn.setAutoCommit(flag);
-			// } catch (SQLException e1) {
-			// e1.printStackTrace();
-			// }
+			 conn.rollback();
+			 conn.setAutoCommit(flag);
+			 } catch (SQLException e1) {
+			 e1.printStackTrace();
+			 }
 			e.printStackTrace();
 		} finally {
 			dbConn.closeConn();
@@ -105,57 +108,101 @@ public class FileDao {
 	 * @param uploadFileList
 	 * @return
 	 */
-	@Deprecated
-	public boolean addFileByAndroid(String msg,
-			List<FileForUpload> uploadFileList) {
-		// DBConn dbConn = new DBConn();
-		// Connection conn = dbConn.getConn();
-		//
-		// int result = 0;
-		//
-		// boolean flag = false;
-		// try {
-		//
-		// flag = conn.getAutoCommit();
-		// //开启事务
-		// conn.setAutoCommit(false);
-		// for(FileForUpload file : uploadFileList) {
-		// String strSQL = "instert into file values(?, ?, ?, ?, ?)";
-		// int temp = dbConn.execOther(strSQL, new Object[]{file.getFurl(),
-		// file.getUploaddate(), file.getUidto(),
-		// file.getUidfrom(), 0});
-		//
-		// if(temp > 0 && result > -1) {
-		// result = temp;
-		// }
-		// if(temp < 1) {
-		// result = -1;
-		// }
-		// }
-		//
-		// if(uploadFileList != null && uploadFileList.size() > 0) {
-		// result = -1;
-		// }
-		//
-		// //提交事务
-		// conn.commit();
-		// conn.setAutoCommit(flag);
-		//
-		// } catch (SQLException e) {
-		// try {
-		// //回滚事务
-		// conn.rollback();
-		// conn.setAutoCommit(flag);
-		// } catch (SQLException e1) {
-		// e1.printStackTrace();
-		// }
-		// e.printStackTrace();
-		// } finally {
-		// dbConn.closeConn();
-		// }
-		//
-		// return result > -1 ? true : false;
-		return false;
+	public boolean addFileByAndroid(List<FileForUpload> inputUploadFileList,String baseUrl) {
+		int result = 0;
+		if (inputUploadFileList == null || inputUploadFileList.size() < 1) {
+			return false;
+		}
+
+		DBConn dbConn = new DBConn();
+		Connection conn = dbConn.getConn();
+		NotifyDao notifyDao = new NotifyDao();
+		Notify notify = null;
+
+		boolean flag = false;
+		try {
+
+			flag = conn.getAutoCommit();
+			// 开启事务
+			 conn.setAutoCommit(false);
+			for (FileForUpload file : inputUploadFileList) {
+				
+				//文件存储、路径
+				long name = System.currentTimeMillis();
+				String tmpfname = file.getFname();
+				tmpfname = tmpfname.substring(tmpfname.lastIndexOf("."), tmpfname.length());
+				String furl = baseUrl +"/"+ name
+						+ tmpfname;
+				if (!"".equals(file.getBase64bytes())
+						&& file.getBase64bytes() != null) {
+					Base64Util.writeBASE64toFile(furl, file.getBase64bytes());
+				}
+				//文件存储、路径
+				
+				//文件日期
+				Date uploaddate = new Date();
+				//文件日期
+				
+				String strSQL = "insert into file values(?, ?, ?, ?, ?, ?, ?)";
+				int temp = dbConn.execOther(
+						strSQL,
+						new Object[] { null, furl,
+								uploaddate, file.getUidto(),
+								file.getUid(), 0, file.getFname() });
+
+				if (temp > 0 && result > -1) {
+					result = temp;
+				}
+				if (temp < 1) {
+					result = -1;
+				}
+
+				// Notify
+
+				String sql = "select Fid from file where Furl = ? and Uidfrom = ? and Uidto = ?";
+				ResultSet rs = dbConn.execQuery(
+						sql,
+						new Object[] { furl, file.getUid(),
+								file.getUidto(), });
+				int fid = 0;
+				while (rs.next()) {
+					fid = rs.getInt(1);
+					notify = new Notify();
+					notify.setFid(fid);
+					Date ndate = new Date();
+					notify.setNdate(ndate);
+					notify.setNisread(0);
+					notify.setNotify(file.getMsg());
+					notify.setUidfrom(file.getUid());
+					notify.setUidto(file.getUidto());
+					notifyDao.addNotify(notify);
+					notify = null;
+				}
+				// Notify
+
+			}
+
+			// 提交事务
+			 conn.commit();
+			 conn.setAutoCommit(flag);
+
+		} catch (SQLException e) {
+			 try {
+			// 回滚事务
+			 conn.rollback();
+			 conn.setAutoCommit(flag);
+			 } catch (SQLException e1) {
+			 e1.printStackTrace();
+			 }
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			dbConn.closeConn();
+		}
+
+		return result > -1 ? true : false;
 	}
 
 	/**
@@ -177,7 +224,7 @@ public class FileDao {
 
 			flag = conn.getAutoCommit();
 			// 开启事务
-			// conn.setAutoCommit(false);
+			 conn.setAutoCommit(false);
 			for (int i : fidList) {
 
 				String strSQL = "select Furl from file where Fid = ?";
@@ -211,17 +258,17 @@ public class FileDao {
 			}
 
 			// 提交事务
-			// conn.commit();
-			// conn.setAutoCommit(flag);
+			 conn.commit();
+			 conn.setAutoCommit(flag);
 
 		} catch (SQLException e) {
-			// try {
+			 try {
 			// 回滚事务
-			// conn.rollback();
-			// conn.setAutoCommit(flag);
-			// } catch (SQLException e1) {
-			// e1.printStackTrace();
-			// }
+			 conn.rollback();
+			 conn.setAutoCommit(flag);
+			 } catch (SQLException e1) {
+			 e1.printStackTrace();
+			 }
 			e.printStackTrace();
 		} finally {
 			dbConn.closeConn();
