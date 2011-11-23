@@ -26,17 +26,17 @@ public class RegisterServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String type = request.getParameter("type");
-		if("show".equals(type)) show(request, response);
+		//if("show".equals(type)) show(request, response);
 		if("add".equals(type)) add(request, response);
 	}
 	
-	public void show(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		GradeDao gradeDao = new GradeDao();
-		List<Grade> list = gradeDao.getAllGradesList();
-		request.setAttribute("grades", list);
-		request.getRequestDispatcher("registerUI.jsp").forward(request, response);
-	}
+//	public void show(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//
+//		GradeDao gradeDao = new GradeDao();
+//		List<Grade> list = gradeDao.getAllGradesList();
+//		request.setAttribute("grades", list);
+//		request.getRequestDispatcher("registerUI.jsp").forward(request, response);
+//	}
 	
 	public void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -46,7 +46,7 @@ public class RegisterServlet extends HttpServlet {
 		String strMajorID = request.getParameter("major");
 		String strClassID = request.getParameter("class");
 		
-		String name = request.getParameter("loginName");
+		String name = request.getParameter("loginName").trim();
 		boolean flag = userDao.checkUserName(name);
 		if(!flag){
 			response.sendRedirect("registerUI.jsp?msg=10");
@@ -54,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
 		}
 		
 		
-		String password  = request.getParameter("password");
+		String password  = request.getParameter("password").trim();
 		
 		int gradeId = Integer.parseInt(strGradeID);
 		int majorId = Integer.parseInt(strMajorID);

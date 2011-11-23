@@ -42,7 +42,7 @@
                         	<input type="image" tabindex="3" src="${pageContext.request.contextPath}//style/blue/images/login/userLogin_button.gif" />
                         </td>
                          <td rowspan="2" style="padding-left:10px;">
-                        	<a href="${pageContext.request.contextPath}//RegisterServlet?type=show"><img tabindex="3" src="${pageContext.request.contextPath}//style/blue/images/login/userReg_button.gif" /></a>
+                        	<a href="${pageContext.request.contextPath}//registerUI.jsp"><img tabindex="3" src="${pageContext.request.contextPath}//style/blue/images/login/userReg_button.gif" /></a>
                         </td>
                     </tr>
                     <tr>

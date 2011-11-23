@@ -44,7 +44,7 @@ public class AjaxServlet extends HttpServlet {
 	private void getUser(HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/html; charset=utf-8");
 
-		String loginName = request.getParameter("loginName");
+		String loginName = request.getParameter("loginName").trim();
 
 		UserDao userDao = new UserDao();
 
@@ -103,7 +103,7 @@ public class AjaxServlet extends HttpServlet {
 
 		String strMid = request.getParameter("ID");
 
-		System.out.println(strMid);
+		//System.out.println(strMid);
 
 		int mid = Integer.parseInt(strMid);
 

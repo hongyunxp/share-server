@@ -33,8 +33,8 @@ public class LogServlet extends HttpServlet {
 	public void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		User user = new User();
-		user.setUname(request.getParameter("loginName"));
-		user.setUpasswd(request.getParameter("password"));
+		user.setUname(request.getParameter("loginName").trim());
+		user.setUpasswd(request.getParameter("password").trim());
 		
 		UserDao userDao = new UserDao();
 		user = userDao.userLogin(user);

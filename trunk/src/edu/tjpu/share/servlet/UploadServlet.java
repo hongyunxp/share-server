@@ -70,7 +70,7 @@ public class UploadServlet extends HttpServlet {
 
 					}
 
-					System.out.println("普通控件 ， 名为: " + item.getFieldName() + "值为: ");
+					//System.out.println("普通控件 ， 名为: " + item.getFieldName() + "值为: ");
 
 				} else {
 					// 获得获得文件名，此文件名包括路径

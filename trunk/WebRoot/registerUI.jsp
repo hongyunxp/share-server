@@ -1,4 +1,4 @@
-<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*,edu.tjpu.share.util.*, edu.tjpu.share.po.*, edu.tjpu.share.dao.*" pageEncoding="UTF-8"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -118,13 +118,20 @@ function getUser() {
 								<td width="100">
 									班级信息
 								</td>
+								
+								<%
+									GradeDao gradeDao = new GradeDao();
+								List<Grade> list = gradeDao.getAllGradesList();
+								%>
 								<td>
 									<select name="grade" id="grade"  styleClass="SelectStyle" onchange="getMajor()"  class="{required:true}">
-										<option value="">请选择学院</option>
+										<option value="" selected="selected">请选择学院</option>
 										
-										<c:forEach items="${grades}" var="grade" >
-											<option value="${grade.gid}">${grade.gname}</option>
-										</c:forEach>
+										
+										
+										<%for(Grade g : list) { %>
+											<option value="<%=g.getGid() %>"><%=g.getGname() %></option>
+									<%} %>
 									</select>
 									<select name="major" id="major" property="departmentId" styleClass="SelectStyle" onchange="getClass()"  class="{required:true}">
 										<option value="">请选择专业</option>

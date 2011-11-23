@@ -46,8 +46,8 @@ public class UserServlet extends HttpServlet {
 
 	private void modifyUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String oldpassword = request.getParameter("oldpassword");
-		String newpassword = request.getParameter("newpassword");
+		String oldpassword = request.getParameter("oldpassword").trim();
+		String newpassword = request.getParameter("newpassword").trim();
 		
 		User user = (User)request.getSession().getAttribute("user");
 		
