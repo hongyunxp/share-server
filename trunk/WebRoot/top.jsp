@@ -46,7 +46,7 @@
        
         
         <div id="Head2_FunctionList" style="text-align: left">
-        	<a href="javascript: window.parent.desktop.location.reload(true);">刷新</a>
+        	
         </div>
     </div>
 
