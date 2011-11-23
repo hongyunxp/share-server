@@ -75,8 +75,10 @@ public class FileServlet extends HttpServlet {
 	    boolean flag = fileDao.deleteFileByIDList(fidList);
 	    
 	    int msg = flag ? 8 : 9;
+	    
+	    String current = request.getParameter("current");
 		
-		request.getRequestDispatcher("FileServlet?type=showMyFile&current=1&msg=" + msg).forward(request, response);
+		request.getRequestDispatcher("FileServlet?type=showMyFile&current="+ current +"&msg=" + msg).forward(request, response);
 	}
 
 
