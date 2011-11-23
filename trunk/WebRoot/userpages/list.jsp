@@ -80,7 +80,7 @@
 				<TBODY ID="TableData" CLASS="dataContainer" align="center">
 					<%
 						for(User u : users) {
-							if(u.getUid() == ((User)request.getSession().getAttribute("user")).getUid())continue;
+
 							Map<String, Integer> map = userDao.getUserGradeMajorClassByUID(u.getUid());
 							
 							String avatar = u.getUavatar();
