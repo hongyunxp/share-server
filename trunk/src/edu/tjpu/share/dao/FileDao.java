@@ -1,6 +1,7 @@
 package edu.tjpu.share.dao;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -146,11 +147,12 @@ public class FileDao {
 				//文件日期
 				
 				String strSQL = "insert into file values(?, ?, ?, ?, ?, ?, ?)";
+				String fname = URLDecoder.decode(file.getFname(),"UTF-8");
 				int temp = dbConn.execOther(
 						strSQL,
 						new Object[] { null, furl,
 								uploaddate, file.getUidto(),
-								file.getUid(), 0, file.getFname() });
+								file.getUid(), 0, fname });
 
 				if (temp > 0 && result > -1) {
 					result = temp;
@@ -174,7 +176,8 @@ public class FileDao {
 					Date ndate = new Date();
 					notify.setNdate(ndate);
 					notify.setNisread(0);
-					notify.setNotify(file.getMsg());
+					String msg =  URLDecoder.decode(file.getMsg(),"UTF-8");
+					notify.setNotify(msg);
 					notify.setUidfrom(file.getUid());
 					notify.setUidto(file.getUidto());
 					notifyDao.addNotify(notify);
