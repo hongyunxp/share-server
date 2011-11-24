@@ -42,6 +42,7 @@ public class UserListServlet extends HttpServlet {
 		int gid = Integer.parseInt(msg[0].substring(msg[0].indexOf("=")+1, msg[0].length()));
 		int mid = Integer.parseInt(msg[1].substring(msg[1].indexOf("=")+1, msg[1].length()));
 		int cid = Integer.parseInt(msg[2].substring(msg[2].indexOf("=")+1, msg[2].length()));
+		int uid = Integer.parseInt(msg[3].substring(msg[3].indexOf("=")+1, msg[3].length()));
 		
 		UserDao userDao = new UserDao();
 		List<UserForTransfer> userList = userDao.getUserListByClasses(gid, mid, cid);
@@ -50,7 +51,7 @@ public class UserListServlet extends HttpServlet {
 		
 		if (userList != null) {
 			PrintWriter pw = response.getWriter();
-			XMLUtil.generateUserList(pw, userList);
+			XMLUtil.generateUserList(pw, userList,uid);
 		}else {
 			System.out.println("userDao.getUserListByClasses()失败！");
 		}

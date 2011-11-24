@@ -38,7 +38,7 @@ public class FileDao {
 
 			flag = conn.getAutoCommit();
 			// 开启事务
-			 conn.setAutoCommit(false);
+			// conn.setAutoCommit(false);
 			for (edu.tjpu.share.po.File file : fileBeanList) {
 
 				String strSQL = "insert into file values(?, ?, ?, ?, ?, ?, ?)";
@@ -83,17 +83,17 @@ public class FileDao {
 			}
 
 			// 提交事务
-			 conn.commit();
-			 conn.setAutoCommit(flag);
+			// conn.commit();
+			 //conn.setAutoCommit(flag);
 
 		} catch (SQLException e) {
-			 try {
+			// try {
 			// 回滚事务
-			 conn.rollback();
-			 conn.setAutoCommit(flag);
-			 } catch (SQLException e1) {
-			 e1.printStackTrace();
-			 }
+			// conn.rollback();
+			// conn.setAutoCommit(flag);
+			// } catch (SQLException e1) {
+			// e1.printStackTrace();
+			// }
 			e.printStackTrace();
 		} finally {
 			dbConn.closeConn();

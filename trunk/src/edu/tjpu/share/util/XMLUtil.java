@@ -137,7 +137,7 @@ public class XMLUtil {
 	}
 
 	public static void generateUserList(PrintWriter pw,
-			List<UserForTransfer> userList) {
+			List<UserForTransfer> userList, int uid) {
 		Document document = DocumentHelper.createDocument();
 
 		Iterator<UserForTransfer> userIterator = userList.iterator();
@@ -145,21 +145,23 @@ public class XMLUtil {
 		Element userListElement = document.addElement("userList");
 		while (userIterator.hasNext()) {
 			UserForTransfer user = userIterator.next();
+			if (user.getUid() != uid) {
+				Element userElement = userListElement.addElement("user");
 
-			Element userElement = userListElement.addElement("user");
+				Element idElement = userElement.addElement("id");
+				idElement.setText(user.getUid() + "");
 
-			Element idElement = userElement.addElement("id");
-			idElement.setText(user.getUid() + "");
+				Element nameElement = userElement.addElement("name");
+				nameElement.setText(user.getUname());
 
-			Element nameElement = userElement.addElement("name");
-			nameElement.setText(user.getUname());
+				Element avatarElement = userElement.addElement("avatar");
+				avatarElement.setText(user.getUavatar());
 
-			Element avatarElement = userElement.addElement("avatar");
-			avatarElement.setText(user.getUavatar());
-
-			Element mnameElement = userElement.addElement("mname");
-			mnameElement.setText(user.getMname());
-
+				/*
+				 * Element mnameElement = userElement.addElement("mname");
+				 * mnameElement.setText(user.getMname());
+				 */
+			}
 		}
 		try {
 			XMLWriter output = new XMLWriter(pw);
