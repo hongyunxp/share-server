@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.tjpu.share.dao.UserDao;
 import edu.tjpu.share.po.User;
+import edu.tjpu.share.util.Base64Util;
 import edu.tjpu.share.util.XMLUtil;
 
 public class Register4Servlet extends HttpServlet {
@@ -71,6 +72,8 @@ public class Register4Servlet extends HttpServlet {
 		User userBack = userDao.register(user);
 		
 		if (userBack != null) {
+			java.io.File file = new java.io.File(userBack.getUavatar());
+			userBack.setUavatar(Base64Util.readFileInBASE64(file));
 			PrintWriter pw = response.getWriter();
 			XMLUtil.generateUser(pw, userBack);
 		}else {
