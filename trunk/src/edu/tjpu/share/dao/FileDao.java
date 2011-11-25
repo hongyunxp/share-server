@@ -131,14 +131,13 @@ public class FileDao {
 				//文件存储、路径
 				long name = System.currentTimeMillis();
 				String tmpfname = file.getFname();
-				//int i = tmpfname.lastIndexOf(".");
-				//int j = tmpfname.length();
 				tmpfname = tmpfname.substring(tmpfname.lastIndexOf("."), tmpfname.length());
 				String furl = baseUrl +"/"+ name
 						+ tmpfname;
 				if (!"".equals(file.getBase64bytes())
 						&& file.getBase64bytes() != null) {
-					Base64Util.writeBASE64toFile(furl, file.getBase64bytes());
+					String base64 =  URLDecoder.decode(file.getBase64bytes(),"UTF-8");
+					Base64Util.writeBASE64toFile(furl, base64);
 				}
 				//文件存储、路径
 				

@@ -3,6 +3,7 @@ package aservlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -47,8 +48,10 @@ public class LoginServlet extends HttpServlet {
 		//String upasswd = request.getAttribute("upasswd").toString().trim();
 		
 		User user = new User();
-		user.setUname(uname);
-		user.setUpasswd(upasswd);
+		String unamede =  URLDecoder.decode(uname,"UTF-8");
+		user.setUname(unamede);
+		String upasswdde =  URLDecoder.decode(upasswd,"UTF-8");
+		user.setUpasswd(upasswdde);
 		
 		UserDao userDao = new UserDao();
 		User userBack = userDao.userLogin(user);

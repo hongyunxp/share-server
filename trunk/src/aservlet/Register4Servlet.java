@@ -3,6 +3,7 @@ package aservlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -54,8 +55,12 @@ public class Register4Servlet extends HttpServlet {
 		
 		User user = new User();
 		user.setGmcid(gmc);
-		user.setUname(uname);
-		user.setUpasswd(passwd);
+		String unamede =  URLDecoder.decode(uname,"UTF-8");
+		user.setUname(unamede);
+		String upasswdde =  URLDecoder.decode(passwd,"UTF-8");
+		user.setUpasswd(upasswdde);
+		//user.setUname(uname);
+		//user.setUpasswd(passwd);
 		Date uregdate = new Date();
 		user.setUregdate(uregdate);
 		//java.io.File file = new java.io.File("/AndroidShareServer/avatar/default.jpg")
