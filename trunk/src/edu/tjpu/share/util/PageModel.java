@@ -12,7 +12,7 @@ public class PageModel<T> {
 	private int totalPages = 1;
 	private List<T> listPages = new ArrayList<T>();
 
-	private int pageSize = 5;
+	private int pageSize = 7;
 
 	public PageModel(List<T> list, int currentPage) {
 

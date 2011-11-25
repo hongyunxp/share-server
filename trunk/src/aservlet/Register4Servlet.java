@@ -63,8 +63,6 @@ public class Register4Servlet extends HttpServlet {
 		//user.setUpasswd(passwd);
 		Date uregdate = new Date();
 		user.setUregdate(uregdate);
-		//java.io.File file = new java.io.File("/AndroidShareServer/avatar/default.jpg")
-		//user.setUavatar("C:\\Users\\Crystal\\Workspaces\\MyEclipse 10\\AndroidShareServer\\uavatar\\1321002257630.jpg");
 		user.setUavatar(this.getServletContext().getRealPath("/avatar")+"/default.jpg");
 		if(!userDao.checkUserName(uname)){
 			User userb = new User();
