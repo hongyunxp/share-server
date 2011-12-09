@@ -55,6 +55,8 @@ public class UploadServlet extends HttpServlet {
 			User user = (User) request.getSession().getAttribute("user");
 
 			FileDao fileDao = new FileDao();
+			
+			String fileMsg = "";
 
 			while (iterator.hasNext()) {
 
@@ -68,6 +70,10 @@ public class UploadServlet extends HttpServlet {
 						int u_uid = Integer.parseInt(strU_uid);
 						userIDs.add(u_uid);
 
+					}
+					
+					if (name.equals("fileMsg")) {
+						fileMsg = item.getString("utf-8").trim();
 					}
 
 					//System.out.println("普通控件 ， 名为: " + item.getFieldName() + "值为: ");
@@ -108,7 +114,7 @@ public class UploadServlet extends HttpServlet {
 				fileBeans.add(f);
 			}
 			
-			boolean flag = fileDao.addFileByServer(fileBeans);
+			boolean flag = fileDao.addFileByServer(fileBeans, fileMsg);
 			//TODO 根据返回值 返回页面参数
 			int msg = flag ? 6 : 7;
 			request.getRequestDispatcher("FileServlet?type=showMyFile&current=1&msg=" + msg).forward(request, response);

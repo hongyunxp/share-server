@@ -247,8 +247,8 @@ public class TestingServer {
 							}
 							// 把接收的文件转换后写入服务器
 							FileDao fileDao = new FileDao();
-							fileDao.addFileByServer(Base64Util
-									.convertFileforUpload(fileListbuffer,""));
+//							fileDao.addFileByServer(Base64Util
+//									.convertFileforUpload(fileListbuffer,""));
 							continue;
 						}
 						// flag为success表示用户需要更新已读信息

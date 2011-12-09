@@ -183,13 +183,11 @@
 						</TABLE>
 					</DIV>
 						请选择分享文件	<input type="file" name="file" class="{required:true}"/><br/>
+						请填写附带信息<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="fileMsg" rows="10" cols="40"></textarea>
 						
 				</DIV>
-				
-				
-			
-				
-				
+
 				<!-- 表单操作 -->
 				<DIV ID="InputDetailBar">
 					<INPUT TYPE="image" SRC="${pageContext.request.contextPath}/style/images/save.png" />

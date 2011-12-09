@@ -21,7 +21,7 @@ public class FileDao {
 	 * @param fileBeanList
 	 * @return
 	 */
-	public boolean addFileByServer(List<edu.tjpu.share.po.File> fileBeanList) {
+	public boolean addFileByServer(List<edu.tjpu.share.po.File> fileBeanList, String msg) {
 
 		int result = 0;
 		if (fileBeanList == null || fileBeanList.size() < 1) {
@@ -64,6 +64,8 @@ public class FileDao {
 						new Object[] { file.getFurl(), file.getUidfrom(),
 								file.getUidto(), });
 				int fid = 0;
+				
+				if(msg.equals(""))msg = userDao.getUserByID(file.getUidfrom()).getUname() +  "给您分享了" + file.getFname();
 				while (rs.next()) {
 					fid = rs.getInt(1);
 					notify = new Notify();
@@ -72,8 +74,7 @@ public class FileDao {
 					notify.setNdate(ndate);
 					notify.setNisread(0);
 					
-					notify.setNotify(userDao.getUserByID(file.getUidfrom())
-							.getUname() + "给您分享了文件:" + file.getFname());
+					notify.setNotify(msg);
 					notify.setUidfrom(file.getUidfrom());
 					notify.setUidto(file.getUidto());
 					notifyDao.addNotify(notify);
@@ -294,7 +295,7 @@ public class FileDao {
 
 		List<edu.tjpu.share.po.File> files = new ArrayList<edu.tjpu.share.po.File>();
 		for (int i : fidList) {
-			String strSQL = "select * from file where Fid = ?";
+			String strSQL = "select * from file where Fid = ? order by Uploaddate desc";
 			ResultSet rs = dbConn.execQuery(strSQL, new Object[] { i });
 
 			try {
@@ -333,7 +334,7 @@ public class FileDao {
 
 		List<edu.tjpu.share.po.File> files = new ArrayList<edu.tjpu.share.po.File>();
 
-		String strSQL = "select * from file where Uidto = ?";
+		String strSQL = "select * from file where Uidto = ? order by Uploaddate desc";
 		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid });
 
 		try {
@@ -424,7 +425,7 @@ public class FileDao {
 
 		DBConn dbConn = new DBConn();
 
-		String strSQL = "select Uploaddate from file where Fid = ?";
+		String strSQL = "select Uploaddate from file where Fid = ? order by Uploaddate desc";
 		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { fid });
 
 		Date date = null;
@@ -444,7 +445,7 @@ public class FileDao {
 	public edu.tjpu.share.po.File getFileByFileID(int fid) {
 
 		DBConn dbConn = new DBConn();
-		String strSQL = "select * from file where Fid = ?";
+		String strSQL = "select * from file where Fid = ? order by Uploaddate desc";
 		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { fid });
 
 		edu.tjpu.share.po.File file = null;
@@ -476,7 +477,7 @@ public class FileDao {
 
 		List<edu.tjpu.share.po.File> files = new ArrayList<edu.tjpu.share.po.File>();
 
-		String strSQL = "select * from file where Uidfrom = ?";
+		String strSQL = "select * from file where Uidfrom = ? order by Uploaddate desc";
 		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid });
 
 		try {

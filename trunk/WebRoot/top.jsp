@@ -43,7 +43,6 @@
 	</div>
     
     <div id="Head2">
-       
         
         <div id="Head2_FunctionList" style="text-align: left">
         	

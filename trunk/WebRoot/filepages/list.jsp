@@ -50,6 +50,7 @@
 						<TD>
 							文件分享时间
 						</TD>
+						
 						<TD>
 							文件状态
 						</TD>
@@ -57,6 +58,10 @@
 						<TD>
 							文件下载
 						</TD>
+						<TD>
+							附带信息
+						</TD>
+						
 					</TR>
 				</THEAD>
 
@@ -68,10 +73,10 @@
 								<%=f.getFname() %>
 							</TD>
 							
-							<TD width="20%">
+							<TD width="15%">
 								<%=userDao.getUserByID(f.getUidfrom()) %>
 							</TD>
-							<TD  width="20%">
+							<TD  width="15%">
 								<%=f.getUploaddate() %>
 							</TD>
 							<TD  width="10%">
@@ -79,6 +84,9 @@
 							</TD>
 							<TD  width="10%">
 								<a href= "DownloadServlet?fid=<%=f.getFid() %>">下载</a> 
+							</TD>
+							<TD  width="10%">
+								<a href="${pageContext.request.contextPath}/filepages/msg.jsp?fid=<%=f.getFid() %>">信息</a> 
 							</TD>
 						</TR>
 					<%} %>
