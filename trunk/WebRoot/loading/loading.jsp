@@ -10,6 +10,7 @@
 </div>
 <script type="text/javascript">
 //判断页面是否加载完毕，如果加载完毕，就删除加载信息的DIV
+
 function document.onreadystatechange()
 {
 	try
