@@ -10,6 +10,12 @@
 	</head>
 
 	<script type="text/javascript">
+	
+	function changeimg()   
+	  {   
+	  var cn = document.getElementById("cn");   
+	  cn.src="image.jsp?"+Math.random();//随机生成一个数字，让图片缓冲区认为不是同一个缓冲区    
+	  } 
 
 	
 	function getMajor() {
@@ -174,6 +180,17 @@ function getUser() {
 								</td>
 							</tr>
 							
+							<tr>
+					            <td>验证码：</td>
+					            <td align="left"><img border=0 src="image.jsp" name="checkunmimg" id="cn"/><a href="javascript:changeimg()">看不清？换一换</a></td>
+					            <td><div class="Validform_checktip"></div></td>
+       						 </tr>
+							
+							 <tr>
+					           	<td>输入验证码：</td>
+					          	<td align="left"><input type="text"  name="checkunm" class="{required:true,minlength:4}"/></td>
+					           	<td><div class="Validform_checktip"></div></td>
+       						 </tr>
 							
 						</table>
 						<DIV ID="InputDetailBar">

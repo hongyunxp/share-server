@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import edu.tjpu.share.dao.UserDao;
 import edu.tjpu.share.po.User;
+import edu.tjpu.share.util.MD5Util;
 import edu.tjpu.share.util.PageModel;
 
 public class UserServlet extends HttpServlet {
@@ -51,14 +52,14 @@ public class UserServlet extends HttpServlet {
 		
 		User user = (User)request.getSession().getAttribute("user");
 		
-		if(!user.getUpasswd().equals(oldpassword)) {
+		if(!user.getUpasswd().equals(MD5Util.MD5Encode(oldpassword, "utf-8"))) {
 			request.getRequestDispatcher("userpages/modifyPwd.jsp?msg=3").forward(request, response);
 			return;
 		}
 		
 		UserDao userDao = new UserDao();
 		boolean flag = userDao.userPwdUpdate(newpassword, user.getUid());
-		user.setUpasswd(newpassword);
+		user.setUpasswd(MD5Util.MD5Encode(newpassword,"utf-8"));
 		request.getSession().setAttribute("user", user);
 		
 		int msg = flag ? 2 : 3;

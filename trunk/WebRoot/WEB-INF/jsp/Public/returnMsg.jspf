@@ -32,7 +32,8 @@
 			out.print("<script>alert('上传失败，请选择分享用户!');</script>");
 		if (msg.equals("12"))
 			out.print("<script>alert('上传失败，请选择分享文件!');</script>");
-		
+		if (msg.equals("13"))
+			out.print("<script>alert('输入的验证码错误！');</script>");
 		
 	}
 %>

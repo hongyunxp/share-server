@@ -11,6 +11,7 @@ import edu.tjpu.share.po.User;
 import edu.tjpu.share.po.UserForTransfer;
 import edu.tjpu.share.util.Base64Util;
 import edu.tjpu.share.util.DBConn;
+import edu.tjpu.share.util.MD5Util;
 
 public class UserDao {
 	/**
@@ -24,10 +25,14 @@ public class UserDao {
 
 		String uname = user.getUname();
 		String upasswd = user.getUpasswd();
+		
+		String md5password = MD5Util.MD5Encode(upasswd, "utf-8");
 
 		DBConn dbConn = new DBConn();
-		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uname, upasswd });
-
+		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uname, md5password });
+		
+		
+		
 		User userBack = null;
 		try {
 
@@ -61,7 +66,7 @@ public class UserDao {
 
 		String strSQL = "insert into user(Uname, Upasswd, Uregdate, Uavatar, GMCid) values(?, ?, ?, ?, ?)";
 
-		int affectedRows = dbConn.execOther(strSQL, new Object[] { user.getUname(), user.getUpasswd(), user.getUregdate(),
+		int affectedRows = dbConn.execOther(strSQL, new Object[] { user.getUname(), MD5Util.MD5Encode(user.getUpasswd(), "utf-8"), user.getUregdate(),
 				user.getUavatar(), user.getGmcid() });
 		if (affectedRows > 0) {
 			User u = userLogin(user);
@@ -364,9 +369,11 @@ public class UserDao {
 	public boolean userPwdUpdate(String password, int uid) {
 		DBConn dbConn = new DBConn();
 
+		String md5password = MD5Util.MD5Encode(password, "utf-8");
+		
 		String strSQL = "update  user set Upasswd = ? where Uid = ?";
 
-		int affectedRows = dbConn.execOther(strSQL, new Object[] { password, uid});
+		int affectedRows = dbConn.execOther(strSQL, new Object[] { md5password, uid});
 		dbConn.closeConn();
 		return affectedRows > 0 ? true : false;
 	}

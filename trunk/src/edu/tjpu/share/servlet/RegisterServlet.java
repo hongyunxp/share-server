@@ -47,6 +47,17 @@ public class RegisterServlet extends HttpServlet {
 		String strClassID = request.getParameter("class");
 		
 		String name = request.getParameter("loginName").trim();
+		
+		HttpSession session = request.getSession();
+		String rand = (String)session.getAttribute("rand");
+		String input = request.getParameter("checkunm").trim();
+		
+		if(!rand.equals(input)) {
+			response.sendRedirect("registerUI.jsp?msg=13");
+			return;
+		}
+		
+		
 		boolean flag = userDao.checkUserName(name);
 		if(!flag){
 			response.sendRedirect("registerUI.jsp?msg=10");
@@ -70,7 +81,7 @@ public class RegisterServlet extends HttpServlet {
 			u.setUavatar(this.getServletContext().getRealPath("/avatar")+"/default.jpg");
 			u.setUregdate(new Date());
 			u = userDao.register(u);
-			HttpSession session = request.getSession();
+			session = request.getSession();
 			session.setAttribute("user", u);
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 		} else {
