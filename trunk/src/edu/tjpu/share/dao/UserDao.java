@@ -73,6 +73,7 @@ public class UserDao {
 			dbConn.closeConn();
 			return u;
 		}
+		dbConn.closeConn();
 		return null;
 	}
 
@@ -276,6 +277,9 @@ public class UserDao {
 				return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			dbConn.closeConn();
 		}
 		return false;
 

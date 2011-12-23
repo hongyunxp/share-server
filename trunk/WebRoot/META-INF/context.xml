@@ -8,7 +8,7 @@ password="cmxYZX465798"
 driverClassName="com.mysql.jdbc.Driver" 
 url="jdbc:mysql://localhost:3306/share?autoReconnect=true" 
 maxActive="20" 
-maxIdle="30" 
-maxWait="10000"/>
+maxIdle="2" 
+maxWait="5000"/>
 
 </Context>
