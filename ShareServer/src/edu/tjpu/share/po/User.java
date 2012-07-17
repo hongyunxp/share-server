@@ -17,8 +17,14 @@ public class User implements Serializable{
 	private String upasswd;
 	private Date uregdate;
 	private String uavatar;
+	private String xmppUsername;
 	
-	
+	public String getXmppUsername() {
+		return xmppUsername;
+	}
+	public void setXmppUsername(String xmppUsername) {
+		this.xmppUsername = xmppUsername;
+	}
 	public String getUpasswd() {
 		return upasswd;
 	}
