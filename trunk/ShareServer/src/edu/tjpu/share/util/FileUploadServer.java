@@ -7,16 +7,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
+import edu.tjpu.share.dao.UserDao;
+import edu.tjpu.share.po.FileForUpload;
 
 public class FileUploadServer {
 	private ServerSocket server = null;
 	private String fileOutPath = null;
+	private FileForUpload file = null;
 
 	public FileUploadServer() {
 	}
 
-	public synchronized void doService(int PORT, String fileOutPath) {
+	public synchronized void doService(int PORT, String fileOutPath,
+			FileForUpload file) {
 		this.fileOutPath = fileOutPath;
+		this.file = file;
 		try {
 			server = new ServerSocket(PORT);
 			Thread thread = new Thread(new Service(server));
@@ -52,6 +61,32 @@ public class FileUploadServer {
 							bos.write(b);
 						}
 						bos.flush();
+					}
+				}
+
+				List<Integer> idToList = file.getUidto();
+				Iterator<Integer> iterator = idToList.iterator();
+				UserDao userDao = new UserDao();
+				while (iterator.hasNext()) {
+					int uid = iterator.next();
+					String xmppname = userDao.getXMPPName(uid);
+					if (xmppname != null) {
+						Properties formProperties = new Properties();
+						formProperties.put("action", "send");
+						formProperties.put("broadcast", "N");
+						formProperties.put("username", xmppname);
+						formProperties.put("title",
+								userDao.getUserNameById(file.getUid())
+										+ "给您分享了文件：" + file.getFname());
+						formProperties.put("message", file.getMsg());
+						formProperties.put("uri", "");
+						try {
+							NetUtil.requestPostForm(
+									"http://127.0.0.1:7070/notification.do",
+									formProperties);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			} catch (Exception ex) {

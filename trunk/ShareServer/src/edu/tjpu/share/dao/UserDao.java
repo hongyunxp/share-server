@@ -25,14 +25,13 @@ public class UserDao {
 
 		String uname = user.getUname();
 		String upasswd = user.getUpasswd();
-		
+
 		String md5password = MD5Util.MD5Encode(upasswd, "utf-8");
 
 		DBConn dbConn = new DBConn();
-		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uname, md5password });
-		
-		
-		
+		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uname,
+				md5password });
+
 		User userBack = null;
 		try {
 
@@ -66,8 +65,13 @@ public class UserDao {
 
 		String strSQL = "insert into user(Uname, Upasswd, Uregdate, Uavatar, GMCid) values(?, ?, ?, ?, ?)";
 
-		int affectedRows = dbConn.execOther(strSQL, new Object[] { user.getUname(), MD5Util.MD5Encode(user.getUpasswd(), "utf-8"), user.getUregdate(),
-				user.getUavatar(), user.getGmcid() });
+		int affectedRows = dbConn
+				.execOther(
+						strSQL,
+						new Object[] { user.getUname(),
+								MD5Util.MD5Encode(user.getUpasswd(), "utf-8"),
+								user.getUregdate(), user.getUavatar(),
+								user.getGmcid() });
 		if (affectedRows > 0) {
 			User u = userLogin(user);
 			dbConn.closeConn();
@@ -88,7 +92,10 @@ public class UserDao {
 
 		String strSQL = "update  user set Uname = ?, Uavatar = ? where Uid = ?";
 
-		int affectedRows = dbConn.execOther(strSQL, new Object[] { user.getUname(), user.getUavatar(), user.getUid() });
+		int affectedRows = dbConn.execOther(
+				strSQL,
+				new Object[] { user.getUname(), user.getUavatar(),
+						user.getUid() });
 		dbConn.closeConn();
 		if (affectedRows > 0)
 			return user;
@@ -156,7 +163,8 @@ public class UserDao {
 				transfer.setUid(rs.getInt("Uid"));
 				transfer.setUname(rs.getString("Uname"));
 
-				transfer.setUavatar(FileUtil.readFileInBytes(new java.io.File(rs.getString("Uavatar"))));
+				transfer.setUavatar(FileUtil.readFileInBytes(new java.io.File(
+						rs.getString("Uavatar"))));
 
 				String[] names = getUsersGMCinfoByID(rs.getInt("Uid"));
 				transfer.setGid(gid);
@@ -260,6 +268,7 @@ public class UserDao {
 
 	/**
 	 * 如果没有同名则返回true，有则返回false
+	 * 
 	 * @param uname
 	 * @return
 	 */
@@ -345,7 +354,7 @@ public class UserDao {
 		String strSQL = "select Gid, Mid, Cid from grademajorclass where GMCid in (select GMCid from user where Uid = ? )";
 
 		DBConn dbConn = new DBConn();
-		ResultSet rs = dbConn.execQuery(strSQL, new Object[] {uid});
+		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid });
 
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		try {
@@ -365,16 +374,64 @@ public class UserDao {
 		return map;
 
 	}
-	
+
 	public boolean userPwdUpdate(String password, int uid) {
 		DBConn dbConn = new DBConn();
 
 		String md5password = MD5Util.MD5Encode(password, "utf-8");
-		
+
 		String strSQL = "update  user set Upasswd = ? where Uid = ?";
 
-		int affectedRows = dbConn.execOther(strSQL, new Object[] { md5password, uid});
+		int affectedRows = dbConn.execOther(strSQL, new Object[] { md5password,
+				uid });
 		dbConn.closeConn();
 		return affectedRows > 0 ? true : false;
+	}
+
+	public boolean setXMPPName(int uid, String xmppuname) {
+		DBConn dbConn = new DBConn();
+		String strSQL = "update  user set Xmppname = ? where Uid = ?";
+
+		int affectedRows = dbConn.execOther(strSQL, new Object[] { xmppuname,
+				uid });
+		dbConn.closeConn();
+		return affectedRows > 0 ? true : false;
+
+	}
+
+	public String getXMPPName(int uid) {
+		String check = "select Xmppname from user where Uid=?";
+		DBConn dbConn = new DBConn();
+		ResultSet rs = dbConn.execQuery(check, new Object[] { uid });
+
+		try {
+			if (rs.next())
+				return rs.getString("Xmppname");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			dbConn.closeConn();
+		}
+		return null;
+
+	}
+	
+	public String getUserNameById(int uid) {
+		String check = "select Uname from user where uid=?";
+		DBConn dbConn = new DBConn();
+		ResultSet rs = dbConn.execQuery(check, new Object[] { uid });
+
+		try {
+			if (rs.next())
+				return rs.getString("Uname");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			dbConn.closeConn();
+		}
+		return null;
+
 	}
 }

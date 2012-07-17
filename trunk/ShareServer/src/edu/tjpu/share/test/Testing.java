@@ -2,6 +2,7 @@ package edu.tjpu.share.test;
 
 import java.io.File;
 
+import edu.tjpu.share.dao.UserDao;
 import edu.tjpu.share.util.FileUploadServerUtil;
 import edu.tjpu.share.util.PortUtil;
 
@@ -17,19 +18,23 @@ public class Testing {
 				.toString();
 		System.out.println(path);
 
-		
+		/*
 		for (int i = 0; i <100; i++) {
 			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run() {
 					int port = PortUtil.getPort();
-					FileUploadServerUtil.getInstance().doService(port, "R:"+port+".txt");
+					//FileUploadServerUtil.getInstance().doService(port, "R:"+port+".txt");
 					FileUploadClient client = new FileUploadClient("127.0.0.1",port);
 					client.doUpload("R:1.txt");
 				}
 			});
 			t.start();
+			*/
+		UserDao userDao = new UserDao();
+		String xmpp = userDao.getXMPPName(2);
+		System.out.println(xmpp);
 		}
 		
 	}
-}
+

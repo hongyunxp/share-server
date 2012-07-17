@@ -20,10 +20,17 @@ public class UserVo implements Serializable{
 	private int cid;
 	private String cname;
 	private int gmcid;
+	private String xmppUsername;
 	private byte[] uavatar;
 	
 	
 	
+	public String getXmppUsername() {
+		return xmppUsername;
+	}
+	public void setXmppUsername(String xmppUsername) {
+		this.xmppUsername = xmppUsername;
+	}
 	public String getUpasswd() {
 		return upasswd;
 	}

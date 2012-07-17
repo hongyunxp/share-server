@@ -34,6 +34,10 @@ public class UserLoginImpl implements IUserLogin {
 		if (userBackGet == null) {
 			System.out.println(in.getUname() + "登录失败！");
 		} else {
+			if(in.getXmppUsername()!=null&&!"".equals(in.getXmppUsername())){
+				UserDao userDao = new UserDao();
+				userDao.setXMPPName(userBackGet.getUid(), in.getXmppUsername());
+			}
 
 			if (needAvatar && userBack != null) {
 				try {
