@@ -9,7 +9,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import edu.tjpu.share.dao.UserDao;
 import edu.tjpu.share.po.FileForUpload;
@@ -71,22 +70,7 @@ public class FileUploadServer {
 					int uid = iterator.next();
 					String xmppname = userDao.getXMPPName(uid);
 					if (xmppname != null) {
-						Properties formProperties = new Properties();
-						formProperties.put("action", "send");
-						formProperties.put("broadcast", "N");
-						formProperties.put("username", xmppname);
-						formProperties.put("title",
-								userDao.getUserNameById(file.getUid())
-										+ "给您分享了文件：" + file.getFname());
-						formProperties.put("message", file.getMsg());
-						formProperties.put("uri", "");
-						try {
-							NetUtil.requestPostForm(
-									"http://127.0.0.1:7070/notification.do",
-									formProperties);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+						XMPPMsgUtil.sendMsg2SingleUser(xmppname, file, userDao);
 					}
 				}
 			} catch (Exception ex) {
