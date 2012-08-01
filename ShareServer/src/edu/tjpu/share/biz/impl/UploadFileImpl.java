@@ -3,17 +3,12 @@ package edu.tjpu.share.biz.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
 
 import edu.tjpu.share.biz.IUploadFile;
 import edu.tjpu.share.dao.FileDao;
-import edu.tjpu.share.dao.UserDao;
 import edu.tjpu.share.po.FileForUpload;
 import edu.tjpu.share.util.FileUploadServerUtil;
 import edu.tjpu.share.util.IpTimeStamp;
-import edu.tjpu.share.util.NetUtil;
 import edu.tjpu.share.util.PortUtil;
 
 public class UploadFileImpl implements IUploadFile {
