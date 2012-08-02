@@ -43,6 +43,7 @@ public class UserDao {
 				userBack.setGmcid(rs.getInt("GMCid"));
 				userBack.setUregdate(rs.getTimestamp("Uregdate"));
 				userBack.setUavatar(rs.getString("Uavatar"));
+				userBack.setXmppUsername(rs.getString("Xmppname"));
 			}
 
 		} catch (Exception e) {
@@ -63,7 +64,7 @@ public class UserDao {
 	public User register(User user) {
 		DBConn dbConn = new DBConn();
 
-		String strSQL = "insert into user(Uname, Upasswd, Uregdate, Uavatar, GMCid) values(?, ?, ?, ?, ?)";
+		String strSQL = "insert into user(Uname, Upasswd, Uregdate, Uavatar, GMCid,Xmppname) values(?, ?, ?, ?, ?,?)";
 
 		int affectedRows = dbConn
 				.execOther(
@@ -71,7 +72,7 @@ public class UserDao {
 						new Object[] { user.getUname(),
 								MD5Util.MD5Encode(user.getUpasswd(), "utf-8"),
 								user.getUregdate(), user.getUavatar(),
-								user.getGmcid() });
+								user.getGmcid() ,""});
 		if (affectedRows > 0) {
 			User u = userLogin(user);
 			dbConn.closeConn();
@@ -126,6 +127,7 @@ public class UserDao {
 				userBack.setGmcid(rs.getInt("GMCid"));
 				userBack.setUregdate(rs.getTimestamp("Uregdate"));
 				userBack.setUavatar(rs.getString("Uavatar"));
+				userBack.setXmppUsername(rs.getString("Xmppname"));
 			}
 
 		} catch (Exception e) {
@@ -176,6 +178,7 @@ public class UserDao {
 				transfer.setCid(cid);
 				transfer.setCname(names[2]);
 
+				transfer.setXmppUsername(rs.getString("Xmppname"));
 				backUserForTransfers.add(transfer);
 			}
 
@@ -307,6 +310,7 @@ public class UserDao {
 				userBack.setGmcid(rs.getInt("GMCid"));
 				userBack.setUregdate(rs.getTimestamp("Uregdate"));
 				userBack.setUavatar(rs.getString("Uavatar"));
+				userBack.setXmppUsername(rs.getString("Xmppname"));
 				users.add(userBack);
 			}
 
@@ -337,6 +341,7 @@ public class UserDao {
 				userBack.setGmcid(rs.getInt("GMCid"));
 				userBack.setUregdate(rs.getTimestamp("Uregdate"));
 				userBack.setUavatar(rs.getString("Uavatar"));
+				userBack.setXmppUsername(rs.getString("Xmppname"));
 				users.add(userBack);
 			}
 
