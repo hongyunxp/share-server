@@ -151,9 +151,9 @@ public class FileDao {
 
 				// Notify
 
-				String sql = "select Fid from file where Furl = ? and Uidfrom = ? and Uidto = ?";
+				String sql = "select Fid from file where Furl = ? and Fname=? and Uidfrom = ? and Uidto = ?";
 				ResultSet rs = dbConn.execQuery(sql, new Object[] {
-						inputUploadFile.getFurl(), inputUploadFile.getUid(),
+						inputUploadFile.getFurl(), fname,inputUploadFile.getUid(),
 						uidto, });
 				int fid = 0;
 				while (rs.next()) {
@@ -314,15 +314,15 @@ public class FileDao {
 	 * @param uid
 	 * @return
 	 */
-	public List<edu.tjpu.share.po.File> getUsersFileListByUserID(int uid) {
+	public List<edu.tjpu.share.po.File> getUsersFileListByUserID(int uid,int start,int offset) {
 		// 得到分享给该用户的文件列表
 
 		DBConn dbConn = new DBConn();
 
 		List<edu.tjpu.share.po.File> files = new ArrayList<edu.tjpu.share.po.File>();
 
-		String strSQL = "select * from file where Uidto = ? order by Uploaddate desc";
-		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid });
+		String strSQL = "select * from file where Uidto = ? order by Uploaddate desc LIMIT ?,?";
+		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid ,start,offset});
 
 		try {
 			while (rs.next()) {

@@ -14,14 +14,18 @@ import edu.tjpu.share.po.FileForDownload;
 public class MessageListImpl implements IMessageList {
 
 	@Override
-	public List<FileForDownload> getMessageList(int uid) {
+	public List<FileForDownload> getMessageList(int uid, int offset) {
 		List<edu.tjpu.share.po.File> fileList;
 		List<FileForDownload> filefordownloadList = new ArrayList<FileForDownload>();
 
 		FileDao fileDao = new FileDao();
 		NotifyDao notifyDao = new NotifyDao();
 		UserDao userDao = new UserDao();
-		fileList = fileDao.getUsersFileListByUserID(uid);
+		if (offset == 0) {
+			fileList = fileDao.getUsersFileListByUserID(uid, offset, 10);
+		} else {
+			fileList = fileDao.getUsersFileListByUserID(uid, 0, offset+10);
+		}
 
 		Iterator<edu.tjpu.share.po.File> fileIterator = fileList.iterator();
 		while (fileIterator.hasNext()) {
@@ -32,8 +36,10 @@ public class MessageListImpl implements IMessageList {
 			download.setFid(file.getFid());
 			download.setFname(file.getFname());
 			StringBuilder sb = new StringBuilder(file.getFurl());
-			String path = sb.subSequence(sb.indexOf(File.separator+"ShareServer"),sb.length()).toString();
-			
+			String path = sb.subSequence(
+					sb.indexOf(File.separator + "ShareServer"), sb.length())
+					.toString();
+
 			download.setFurl(path);
 			download.setMsg(notifyDao.getMsgByFID(file.getFid()));
 			download.setUnamefrom(userDao.getUserByID(file.getUidfrom())
@@ -45,5 +51,5 @@ public class MessageListImpl implements IMessageList {
 		return filefordownloadList;
 
 	}
-	
+
 }
