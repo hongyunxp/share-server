@@ -28,6 +28,7 @@ public class MessageListServlet extends HttpServlet {
 		MessageListImpl msgList = new MessageListImpl();
 		PHPRPC_Server msgListRPCServ = new PHPRPC_Server();
 		msgListRPCServ.add(msgList);
+		msgListRPCServ.setDebugMode(true);
 		msgListRPCServ.start(request, response);
 
 	}

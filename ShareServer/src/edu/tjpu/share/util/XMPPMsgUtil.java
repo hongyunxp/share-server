@@ -25,5 +25,24 @@ public class XMPPMsgUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void sendMsg2SingleUserWithoutFile(String xmppname, FileForUpload file,
+			UserDao userDao) {
+		Properties formProperties = new Properties();
+		formProperties.put("action", "send");
+		formProperties.put("broadcast", "N");
+		formProperties.put("username", xmppname);
+		formProperties.put("title", userDao.getUserNameById(file.getUid())
+				+ "给您发送了消息：");
+		formProperties.put("message", file.getMsg());
+		formProperties.put("uri", "");
+		try {
+			NetUtil.requestPostForm(
+					"http://localhost:7070/notification.do",
+					formProperties);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
