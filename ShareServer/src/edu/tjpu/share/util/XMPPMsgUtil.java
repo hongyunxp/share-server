@@ -22,7 +22,7 @@ public class XMPPMsgUtil {
 					"http://localhost:7070/notification.do",
 					formProperties);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("------不能连接到XMPP服务器！------");
 		}
 	}
 	
@@ -41,7 +41,7 @@ public class XMPPMsgUtil {
 					"http://localhost:7070/notification.do",
 					formProperties);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("------不能连接到XMPP服务器！------");
 		}
 	}
 

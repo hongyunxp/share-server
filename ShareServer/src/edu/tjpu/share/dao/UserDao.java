@@ -380,15 +380,16 @@ public class UserDao {
 
 	}
 
-	public boolean userPwdUpdate(String password, int uid) {
+	public boolean userPwdUpdate(String oldPassword,String newPassword, int uid) {
 		DBConn dbConn = new DBConn();
 
-		String md5password = MD5Util.MD5Encode(password, "utf-8");
+		String md5OldPassword = MD5Util.MD5Encode(oldPassword, "utf-8");
+		String md5NewPassword = MD5Util.MD5Encode(newPassword, "utf-8");
 
-		String strSQL = "update  user set Upasswd = ? where Uid = ?";
+		String strSQL = "update  user set Upasswd = ? where Uid = ? and Upasswd = ?";
 
-		int affectedRows = dbConn.execOther(strSQL, new Object[] { md5password,
-				uid });
+		int affectedRows = dbConn.execOther(strSQL, new Object[] { md5NewPassword,
+				uid ,md5OldPassword});
 		dbConn.closeConn();
 		return affectedRows > 0 ? true : false;
 	}
