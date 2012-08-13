@@ -27,7 +27,7 @@ public class UploadFileImpl implements IUploadFile {
 			for (int i = 0; i < 10; i++) { // 产生三位随机数
 				sb.append(random.nextInt(10)); // 每位随机数都不超过10
 			}
-			file.setFname(sb.toString()+".msg");
+			file.setFname("没有可下载的文件.msg");
 			file.setFurl(File.separator + "ShareServer"+File.separator+sb.toString());
 			
 			boolean status = fileDao.addFileByAndroid(file);
