@@ -24,7 +24,7 @@ public class MessageListImpl implements IMessageList {
 		if (offset == 0) {
 			fileList = fileDao.getUsersFileListByUserID(uid, offset, 10);
 		} else {
-			fileList = fileDao.getUsersFileListByUserID(uid, 0, offset+10);
+			fileList = fileDao.getUsersFileListByUserID(uid, offset, offset+10);
 		}
 
 		Iterator<edu.tjpu.share.po.File> fileIterator = fileList.iterator();
