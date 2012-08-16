@@ -55,13 +55,17 @@
     <servlet-name>UploadFromAndroid</servlet-name>
     <servlet-class>aservlet.UploadFromAndroid</servlet-class>
   </servlet>
-   <servlet>
+  <servlet>
     <servlet-name>UserModifyServlet</servlet-name>
     <servlet-class>aservlet.UserModifyServlet</servlet-class>
   </servlet>
+   <servlet>
+    <servlet-name>UpdateServlet</servlet-name>
+    <servlet-class>aservlet.UpdateServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
-    <servlet-name>UserModifyServlet</servlet-name>
-    <url-pattern>/servlet/UserModifyServlet</url-pattern>
+    <servlet-name>UpdateServlet</servlet-name>
+    <url-pattern>/servlet/UpdateServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
