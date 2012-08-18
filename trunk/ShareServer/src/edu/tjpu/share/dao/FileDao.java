@@ -152,9 +152,9 @@ public class FileDao {
 				// Notify
 
 				String sql = "select Fid from file where Furl = ? and Fname=? and Uidfrom = ? and Uidto = ?";
-				ResultSet rs = dbConn.execQuery(sql, new Object[] {
-						inputUploadFile.getFurl(), fname,inputUploadFile.getUid(),
-						uidto, });
+				ResultSet rs = dbConn.execQuery(sql,
+						new Object[] { inputUploadFile.getFurl(), fname,
+								inputUploadFile.getUid(), uidto, });
 				int fid = 0;
 				while (rs.next()) {
 					fid = rs.getInt(1);
@@ -314,7 +314,8 @@ public class FileDao {
 	 * @param uid
 	 * @return
 	 */
-	public List<edu.tjpu.share.po.File> getUsersFileListByUserID(int uid,int start,int offset) {
+	public List<edu.tjpu.share.po.File> getUsersFileListByUserID(int uid,
+			int start, int offset) {
 		// 得到分享给该用户的文件列表
 
 		DBConn dbConn = new DBConn();
@@ -322,7 +323,8 @@ public class FileDao {
 		List<edu.tjpu.share.po.File> files = new ArrayList<edu.tjpu.share.po.File>();
 
 		String strSQL = "select * from file where Uidto = ? order by Uploaddate desc LIMIT ?,?";
-		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid ,start,offset});
+		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid, start,
+				offset });
 
 		try {
 			while (rs.next()) {
@@ -500,5 +502,60 @@ public class FileDao {
 		}
 
 		return files;
+	}
+
+	public String getFileURLByFileID(int fid) {
+
+		DBConn dbConn = new DBConn();
+		String strSQL = "select Furl from file where Fid = ?";
+		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { fid });
+
+		String fileName = null;
+		try {
+			while (rs.next()) {
+				fileName = rs.getString("Furl");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbConn.closeConn();
+		}
+
+		return fileName;
+	}
+
+	public edu.tjpu.share.po.File getUseless(int fid) {
+		DBConn dbConn = null;
+		edu.tjpu.share.po.File file = null;
+		String strSQL = "SELECT *,count(*) FROM file WHERE Furl = ?";
+		try {
+			String fileName = getFileURLByFileID(fid);
+			if (fileName != null) {
+				dbConn = new DBConn();
+				ResultSet rs = dbConn.execQuery(strSQL,
+						new Object[] { fileName});
+				while (rs.next()) {
+					int countnum = rs.getInt("count(*)");
+					if (countnum == 1) {
+						file = new edu.tjpu.share.po.File();
+						file.setFid(rs.getInt("Fid"));
+						file.setFurl(rs.getString("Furl"));
+						file.setUploaddate(rs.getTimestamp("Uploaddate"));
+						file.setUidto(rs.getInt("Uidto"));
+						file.setUidfrom(rs.getInt("Uidfrom"));
+						file.setIsread(rs.getInt("Isread"));
+						file.setFname(rs.getString("fname"));
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (dbConn != null)
+				dbConn.closeConn();
+		}
+
+		return file;
 	}
 }
