@@ -80,6 +80,7 @@ public class UpdateImpl implements IUpdate {
 								sb.length()).toString();
 				System.out.println("--------Furl:" + path);
 				download.setFurl(path);
+				download.setFname(fileName);
 				return download;
 			}
 		}
