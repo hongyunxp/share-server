@@ -102,4 +102,12 @@ public class FileUtil {
 
 	}
 
+	public static boolean deleteFileAt(String sFilePath){
+		File file = new File(sFilePath);
+		if(file.exists()){
+			return file.delete();
+		}
+		return false;
+		
+	}
 }

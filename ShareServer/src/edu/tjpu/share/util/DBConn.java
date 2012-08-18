@@ -1,5 +1,6 @@
 package edu.tjpu.share.util;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ public class DBConn {
 
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
+	private CallableStatement cstmt = null;
 	private ResultSet rs = null;
 
 	public DBConn() {
@@ -29,16 +31,16 @@ public class DBConn {
 		// } catch (SQLException e) {
 		// e.printStackTrace();
 		// }
-		
-		String jndi = "jdbc/test"; 
+
+		String jndi = "jdbc/test";
 		try {
 			Context initContext = new InitialContext();
-			Context envContext  = (Context)initContext.lookup("java:/comp/env");//固定，不需要修改
-			DataSource ds = (DataSource)envContext.lookup(jndi);
-			if(ds != null){
-			conn = ds.getConnection();
+			Context envContext = (Context) initContext.lookup("java:/comp/env");// 固定，不需要修改
+			DataSource ds = (DataSource) envContext.lookup(jndi);
+			if (ds != null) {
+				conn = ds.getConnection();
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -46,8 +48,7 @@ public class DBConn {
 	}
 
 	public Connection getConn() {
-		
-		  
+
 		return conn;
 	}
 
@@ -62,6 +63,13 @@ public class DBConn {
 		if (pstmt != null) {
 			try {
 				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		if (cstmt != null) {
+			try {
+				cstmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -81,7 +89,6 @@ public class DBConn {
 		try {
 
 			pstmt = conn.prepareStatement(strSQL);
-			// 4����̬Ϊpstmt���ֵ
 			for (int i = 0; i < params.length; i++) {
 				pstmt.setObject(i + 1, params[i]);
 			}
@@ -101,12 +108,29 @@ public class DBConn {
 		try {
 
 			pstmt = conn.prepareStatement(strSQL);
-			// 4����̬Ϊpstmt����ֵ
 			for (int i = 0; i < params.length; i++) {
 				pstmt.setObject(i + 1, params[i]);
 			}
 
 			rs = pstmt.executeQuery();
+
+			return rs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public ResultSet execCallable(final String strSQL, final Object[] params) {
+
+		System.out.println("SQL:> " + strSQL);
+		try {
+			cstmt = conn.prepareCall(strSQL);
+			for (int i = 0; i < params.length; i++) {
+				cstmt.setObject(i + 1, params[i]);
+			}
+
+			rs = cstmt.executeQuery();
 
 			return rs;
 		} catch (SQLException e) {

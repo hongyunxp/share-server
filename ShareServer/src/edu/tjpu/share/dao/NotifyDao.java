@@ -22,8 +22,11 @@ public class NotifyDao {
 
 		String strSQL = "insert into notify values(?, ?, ?, ?, ?, ?, ?)";
 
-		int result = dbConn.execOther(strSQL, new Object[] {null, notify.getUidfrom(), notify.getUidto(), notify.getNdate(),
-				0, notify.getNotify() ,notify.getFid()});
+		int result = dbConn.execOther(
+				strSQL,
+				new Object[] { null, notify.getUidfrom(), notify.getUidto(),
+						notify.getNdate(), 0, notify.getNotify(),
+						notify.getFid() });
 		dbConn.closeConn();
 		return result > 0 ? true : false;
 	}
@@ -205,8 +208,8 @@ public class NotifyDao {
 
 		return notifies;
 	}
-	
-	public String getMsgByFID(int fid){
+
+	public String getMsgByFID(int fid) {
 		DBConn dbConn = new DBConn();
 
 		String msg = null;
@@ -226,6 +229,34 @@ public class NotifyDao {
 
 		return msg;
 	}
-	
+
+	public Notify getNotifyByFid(int fid) {
+		// 读取给该用户的通知
+		DBConn dbConn = new DBConn();
+
+		Notify notify = null;
+
+		String strSQL = "select * from notify where Fid = ?";
+		ResultSet rs = dbConn.execQuery(strSQL, new Object[] { fid });
+
+		try {
+			while (rs.next()) {
+				notify = new Notify();
+				notify.setNid(rs.getInt("Nid"));
+				notify.setUidfrom(rs.getInt("Uidfrom"));
+				notify.setUidto(rs.getInt("Uidto"));
+				notify.setNdate(rs.getTimestamp("Ndate"));
+				notify.setNisread(rs.getInt("Nisread"));
+				notify.setNotify(rs.getString("Notify"));
+				notify.setFid(rs.getInt("Fid"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			dbConn.closeConn();
+		}
+
+		return notify;
+	}
 
 }
