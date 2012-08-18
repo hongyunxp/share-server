@@ -393,6 +393,19 @@ public class UserDao {
 		dbConn.closeConn();
 		return affectedRows > 0 ? true : false;
 	}
+	
+	 public boolean userPwdUpdate(String password, int uid) {
+         DBConn dbConn = new DBConn();
+
+         String md5password = MD5Util.MD5Encode(password, "utf-8");
+
+         String strSQL = "update  user set Upasswd = ? where Uid = ?";
+
+         int affectedRows = dbConn.execOther(strSQL, new Object[] { md5password,
+                         uid });
+         dbConn.closeConn();
+         return affectedRows > 0 ? true : false;
+ }
 
 	public boolean setXMPPName(int uid, String xmppuname) {
 		DBConn dbConn = new DBConn();

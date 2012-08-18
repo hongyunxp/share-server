@@ -347,7 +347,38 @@ public class FileDao {
 
 		return files;
 	}
+	
+	 public List<edu.tjpu.share.po.File> getUsersFileListByUserID(int uid) {
+         // 得到分享给该用户的文件列表
 
+         DBConn dbConn = new DBConn();
+
+         List<edu.tjpu.share.po.File> files = new ArrayList<edu.tjpu.share.po.File>();
+
+         String strSQL = "select * from file where Uidto = ? order by Uploaddate desc";
+         ResultSet rs = dbConn.execQuery(strSQL, new Object[] { uid });
+
+         try {
+                 while (rs.next()) {
+                         edu.tjpu.share.po.File file = new edu.tjpu.share.po.File();
+                         file.setFid(rs.getInt("Fid"));
+                         file.setFurl(rs.getString("Furl"));
+                         file.setUploaddate(rs.getTimestamp("Uploaddate"));
+                         file.setUidto(rs.getInt("Uidto"));
+                         file.setUidfrom(rs.getInt("Uidfrom"));
+                         file.setIsread(rs.getInt("Isread"));
+                         file.setFname(rs.getString("fname"));
+                         files.add(file);
+
+                 }
+         } catch (Exception e) {
+                 e.printStackTrace();
+         } finally {
+                 dbConn.closeConn();
+         }
+
+         return files;
+ }
 	/**
 	 * 更新文件的已读状态, 若list为null或list，size为0，返回false
 	 * 
