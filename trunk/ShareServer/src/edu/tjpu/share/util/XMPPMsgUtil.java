@@ -44,5 +44,24 @@ public class XMPPMsgUtil {
 			System.out.println("------不能连接到XMPP服务器！------");
 		}
 	}
+	
+	public static void sendMsg2SingleUserWithoutFile(String xmppname, String msg,int uidFrom,
+			UserDao userDao) {
+		Properties formProperties = new Properties();
+		formProperties.put("action", "send");
+		formProperties.put("broadcast", "N");
+		formProperties.put("username", xmppname);
+		formProperties.put("title", userDao.getUserNameById(uidFrom)
+				+ "给您发送了消息：");
+		formProperties.put("message", msg);
+		formProperties.put("uri", "");
+		try {
+			NetUtil.requestPostForm(
+					"http://localhost:7070/notification.do",
+					formProperties);
+		} catch (Exception e) {
+			System.out.println("------不能连接到XMPP服务器！------");
+		}
+	}
 
 }
