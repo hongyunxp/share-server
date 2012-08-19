@@ -18,7 +18,9 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import edu.tjpu.share.dao.FileDao;
+import edu.tjpu.share.dao.UserDao;
 import edu.tjpu.share.po.User;
+import edu.tjpu.share.util.XMPPMsgUtil;
 
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -102,7 +104,7 @@ public class UploadServlet extends HttpServlet {
 				response.sendRedirect("FileServlet?type=showMyFile&msg=12&current=1");
 				return;
 			}
-			
+			UserDao userDao = new UserDao();
 			filename = filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
 			for(int i : userIDs) {
 				edu.tjpu.share.po.File f = new edu.tjpu.share.po.File();
@@ -113,9 +115,27 @@ public class UploadServlet extends HttpServlet {
 				f.setUploaddate(new Date());
 				f.setIsread(0);
 				fileBeans.add(f);
+				//xmpp
+				int uid = i;
+				String xmppname = userDao.getXMPPName(uid);
+				if (xmppname != null) {
+					String tmpMsg;
+					if (fileMsg.equals(""))
+						tmpMsg = userDao.getUserByID(user.getUid()).getUname()
+								+ "给您分享了" + filename;
+					else
+						tmpMsg = fileMsg;
+					XMPPMsgUtil.sendMsg2SingleUserWithoutFile(xmppname, tmpMsg,user.getUid(), userDao);
+				}
+				//xmpp
 			}
 			
 			boolean flag = fileDao.addFileByServer(fileBeans, fileMsg);
+			
+			
+			
+			
+			
 			//TODO 根据返回值 返回页面参数
 			int msg = flag ? 6 : 7;
 			request.getRequestDispatcher("FileServlet?type=showMyFile&current=1&msg=" + msg).forward(request, response);

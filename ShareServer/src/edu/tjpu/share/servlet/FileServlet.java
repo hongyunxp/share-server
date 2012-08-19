@@ -1,7 +1,9 @@
 package edu.tjpu.share.servlet;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,9 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import edu.tjpu.share.dao.FileDao;
+import edu.tjpu.share.dao.FileLogDao;
+import edu.tjpu.share.dao.NotifyDao;
 import edu.tjpu.share.po.File;
+import edu.tjpu.share.po.FileLog;
+import edu.tjpu.share.po.Notify;
 import edu.tjpu.share.po.User;
+import edu.tjpu.share.util.FileUtil;
 import edu.tjpu.share.util.PageModel;
 
 public class FileServlet extends HttpServlet {
@@ -75,6 +84,30 @@ public class FileServlet extends HttpServlet {
 	    
 	    boolean flag = fileDao.deleteFileByIDList(fidList);
 	    
+	    //处理实体文件
+	    if(flag){
+	    NotifyDao notifyDao = new NotifyDao();
+		Iterator<Integer> fidIterator = fidList.iterator();
+		while(fidIterator.hasNext()){
+			int tmpFid = fidIterator.next();
+			File tmpFile = fileDao.getUseless(tmpFid);
+			Notify notify = notifyDao.getNotifyByFid(tmpFid);
+			if(tmpFile!=null&&notify!=null){
+			FileLog fileLog = new FileLog();
+			try {
+				BeanUtils.copyProperties(fileLog, tmpFile);
+				BeanUtils.copyProperties(fileLog, notify);
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			FileLogDao fileLogDao = new FileLogDao();
+			fileLogDao.addNewLog(fileLog);
+			FileUtil.deleteFileAt(fileLog.getFurl());
+			}
+		}
+	    }
+		//处理实体文件
+		
 	    int msg = flag ? 8 : 9;
 	    
 	    String current = request.getParameter("current");
