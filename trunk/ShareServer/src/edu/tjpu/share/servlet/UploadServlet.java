@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +25,9 @@ import edu.tjpu.share.util.XMPPMsgUtil;
 
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		doPost(request, response);
 	}
@@ -61,10 +64,10 @@ public class UploadServlet extends HttpServlet {
 			
 			String fileMsg = "";
 
+			boolean withoutFile = false;
 			while (iterator.hasNext()) {
 
 				FileItem item = iterator.next();
-
 				// 如果当前项是普通表单项。
 				if (item.isFormField()) {
 					String name = item.getFieldName();
@@ -94,6 +97,16 @@ public class UploadServlet extends HttpServlet {
 						if (filetoserver.getName() != null) {
 							filepath = this.getServletContext().getRealPath("/upload")+ "/" + time + temp;
 						}
+					}else{
+						// 只发消息
+						StringBuilder sb = new StringBuilder();
+						Random random = new Random(); // 要产生随机数
+						for (int i = 0; i < 10; i++) { // 产生三位随机数
+							sb.append(random.nextInt(10)); // 每位随机数都不超过10
+						}
+						filename = "没有可下载的文件.msg";
+						filepath= File.separator + "ShareServer"+File.separator+sb.toString();
+						withoutFile = true;
 					}
 				}
 
@@ -104,6 +117,7 @@ public class UploadServlet extends HttpServlet {
 				response.sendRedirect("FileServlet?type=showMyFile&msg=12&current=1");
 				return;
 			}
+			if(!withoutFile){
 			UserDao userDao = new UserDao();
 			filename = filename.substring(filename.lastIndexOf("\\") + 1, filename.length());
 			for(int i : userIDs) {
@@ -125,9 +139,36 @@ public class UploadServlet extends HttpServlet {
 								+ "给您分享了" + filename;
 					else
 						tmpMsg = fileMsg;
-					XMPPMsgUtil.sendMsg2SingleUserWithoutFile(xmppname, tmpMsg,user.getUid(), userDao);
+					XMPPMsgUtil.sendMsg2SingleUser(xmppname, tmpMsg,filename,user.getUid(), userDao);
 				}
 				//xmpp
+			}
+				
+			}else{
+				// 只发消息
+				UserDao userDao = new UserDao();
+				for(int i : userIDs) {
+					edu.tjpu.share.po.File f = new edu.tjpu.share.po.File();
+					f.setFname(filename);
+					f.setFurl(filepath);
+					f.setUidfrom(user.getUid());
+					f.setUidto(i);
+					f.setUploaddate(new Date());
+					f.setIsread(0);
+					fileBeans.add(f);
+					//xmpp
+					int uid = i;
+					String xmppname = userDao.getXMPPName(uid);
+					if (xmppname != null) {
+						if (fileMsg.equals("")){
+							response.sendRedirect("FileServlet?type=showMyFile&msg=12&current=1");
+							return;
+						}
+						else
+						XMPPMsgUtil.sendMsg2SingleUserWithoutFile(xmppname, fileMsg,user.getUid(), userDao);
+					}
+					//xmpp
+				}
 			}
 			
 			boolean flag = fileDao.addFileByServer(fileBeans, fileMsg);
@@ -146,5 +187,4 @@ public class UploadServlet extends HttpServlet {
 
 		
 	}
-
 }
